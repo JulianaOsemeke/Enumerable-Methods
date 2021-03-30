@@ -49,4 +49,15 @@ describe Enumerable do
       expect([1, 2, 3].my_each_with_index.class).to eq(Enumerator)
     end
   end
+  describe 'my_select method' do
+    it 'returns an enumerator if no block is given' do
+      expect((1..5).my_select.class).to be Enumerator
+    end
+    it 'selects items when called on an array' do
+      expect([1,2,3,4].my_select {|num| num.odd?}).to eq([1,3])
+    end
+    it 'selects items when called on a range' do
+      expect((1..5).my_select {|num| num.odd?}).to eq([1,3,5])
+    end
+  end
 end
