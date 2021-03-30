@@ -155,4 +155,26 @@ describe Enumerable do
       expect(%w[cat mat bat mad].my_none? /bat/).to be false
     end
   end
+
+  describe 'my_count method' do
+    it 'returns 0 when called on empty collection' do
+      expect([].my_count).to eq(0)
+    end
+
+    it 'returns the number of items in a non empty array' do
+      expect([1, 2, 3, 4, 5, 6, 7, 8].my_count).to eq(8)
+    end
+
+    it 'returns the number of items in a range' do
+      expect((1..10).my_count).to eq(10)
+    end
+
+    it 'returns the number of items that yields from a block' do
+      expect((1..10).my_count { |num| num.even? }).to eq(5)
+    end
+
+    it 'returns the number equal to a given argument' do
+      expect([1, 2, 3, 3, 4, 5, 3, 6, 7, 3].my_count(3)).to eq(4)
+    end
+  end
 end

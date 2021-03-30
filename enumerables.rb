@@ -76,14 +76,6 @@ module Enumerable
     true
   end
 
-  # def my_none?(prms = nil)
-  #   if block_given?
-  #     !my_any?(&Proc.new)
-  #   else
-  #     !my_any?(prms)
-  #   end
-  # end
-
   def my_count(params = nil)
     i = 0
     if params.nil? && !block_given?
