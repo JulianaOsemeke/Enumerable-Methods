@@ -125,7 +125,34 @@ describe Enumerable do
     end
 
     it 'returns false when the given pattern is a regex and non of the items matches the pattern' do
-      expect(%w[cat mat bat rat].my_all? /go/).to be false
+      expect(%w[cat mat bat rat].my_any? /go/).to be false
+    end
+  end
+
+  describe 'my_none? method' do
+    it 'returns true if a block does not return true for any of the items' do
+      expect([2,4,6,8].my_none? {|num| num.odd?}).to be true
+    end
+    it 'returns false if a block returns true for any of the items' do
+      expect([1,2,3,4].my_none? {|num| num.even?}).to be false
+    end
+    it 'returns true if a block is not passed and collections contains only falsy values' do
+      expect([nil,nil,false].my_none?).to be true
+    end
+    it 'returns false if a block is not passed and collections contains a truthy value' do
+      expect([1,2,3,false].my_none?).to be false
+    end
+    it 'returns true when the given pattern is a class and none of the items are instances of a class' do
+      expect([1,2,3,4].my_none? String).to be true
+    end
+    it 'returns false when the given pattern is a class and at least one of the items is an instance of a class' do
+      expect([1,2,3,4,1.66].my_none? Integer).to be false
+    end
+    it 'returns true when the given pattern is a regex and none of the items matches the pattern' do
+      expect(%w[cat mat bat].my_none? /rat/).to be true
+    end
+    it 'returns false when the given pattern is a regex and one of the items matches the pattern' do
+      expect(%w[cat mat bat mad].my_none? /bat/).to be false
     end
   end
 end
