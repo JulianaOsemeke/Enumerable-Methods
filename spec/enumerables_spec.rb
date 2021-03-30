@@ -177,4 +177,16 @@ describe Enumerable do
       expect([1, 2, 3, 3, 4, 5, 3, 6, 7, 3].my_count(3)).to eq(4)
     end
   end
-end
+
+  describe 'my_map method' do
+    it 'returns an Enumerator if block is not given' do
+      expect([1,2,3,4,5].my_map.class).to be Enumerator
+    end
+    it 'returns empty array if block is empty' do
+       expect([].my_map{|item| item}).to eq([])
+    end
+    it 'returns a map array when called on range' do
+      expect((1..5).my_map{|num| num * 2}).to eq([2,4,6,8,10])
+    end
+  end
+ end
