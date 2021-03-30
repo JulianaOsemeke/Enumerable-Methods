@@ -94,4 +94,38 @@ describe Enumerable do
       expect(%w[cat mat bat mad].my_all? /at/).to be false
     end
   end
+
+  describe 'my_any? method' do
+    it 'returns true if a block returns true' do
+      expect([2, 3, 5, 7].my_any?{|num| num.even?}).to be true
+    end
+
+    it 'returns false if block returns false for all items' do
+      expect([2, 4, 6, 8, 10].my_any?{|num| num.odd?}).to be false
+    end
+
+    it 'returns true if block is not passed and collections contains a non falsy item' do
+      expect([1, nil, false, false].my_any?).to be true
+    end
+
+    it 'returns false if a block is not passed and collections contains only falsy items' do
+      expect([nil, false, nil, false].my_any?).to be false
+    end
+
+    it 'returns true when the given pattern is a class and at least one item is an instance of the class' do
+      expect([1, 2, 3, 4, 'cat'].my_any? String).to be true
+    end
+
+    it 'returns false when the given pattern is a class and none of the items is an instance of the class' do
+      expect([1, 2, 3, 4, 1.66].my_any? String).to be false
+    end
+
+    it 'returns true when the given pattern is a regex and at least one item matches the pattern' do
+      expect(%w[cat mat bat Ruby].my_any? /by/).to be true
+    end
+
+    it 'returns false when the given pattern is a regex and non of the items matches the pattern' do
+      expect(%w[cat mat bat rat].my_all? /go/).to be false
+    end
+  end
 end
