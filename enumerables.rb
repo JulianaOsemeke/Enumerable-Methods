@@ -32,7 +32,7 @@ module Enumerable
 
   def my_all?(params = nil)
     if block_given?
-      to_a.my_each { |item| return false if yield(item) == false }
+      to_a.my_each { |item| return false if !yield(item) }
     elsif params.nil?
       to_a.my_each { |item| return false if item.nil? || item == false }
     elsif !params.nil? && (params.is_a? Class)
