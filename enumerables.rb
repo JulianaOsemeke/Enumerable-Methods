@@ -32,7 +32,7 @@ module Enumerable
 
   def my_all?(params = nil)
     if block_given?
-      to_a.my_each { |item| return false if yield(item) == false }
+      to_a.my_each { |item| return false unless yield(item) }
     elsif params.nil?
       to_a.my_each { |item| return false if item.nil? || item == false }
     elsif !params.nil? && (params.is_a? Class)
@@ -61,12 +61,19 @@ module Enumerable
     false
   end
 
-  def my_none?(prms = nil)
+  def my_none?(params = nil)
     if block_given?
-      !my_any?(&Proc.new)
+      to_a.my_each { |item| return false if yield(item) }
+    elsif params.nil?
+      to_a.my_each { |item| return false unless item.nil? || item == false }
+    elsif !params.nil? && (params.is_a? Class)
+      to_a.my_each { |item| return false if [item.class, item.class.superclass].include?(params) }
+    elsif !params.nil? && params.instance_of?(Regexp)
+      to_a.my_each { |item| return false if item.match(params) }
     else
-      !my_any?(prms)
+      to_a.my_each { |item| return false if item == params }
     end
+    true
   end
 
   def my_count(params = nil)
