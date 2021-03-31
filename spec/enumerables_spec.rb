@@ -1,7 +1,8 @@
-require_relative '../enumerables.rb'
+require_relative '../enumerables'
+# rubocop:disable Style/SymbolProc
 
-  describe Enumerable do
-    describe 'my_each method' do
+describe Enumerable do
+  describe 'my_each method' do
     it 'yields no item when collection is empty' do
       expected = []
       [].my_each { |item| expected << item }
@@ -56,11 +57,11 @@ require_relative '../enumerables.rb'
     end
 
     it 'selects items when called on an array' do
-      expect([1, 2, 3, 4].my_select &:odd?).to eq([1, 3])
+      expect([1, 2, 3, 4].my_select { |num| num.odd? }).to eq([1, 3])
     end
 
     it 'selects items when called on a range' do
-      expect((1..5).my_select &:odd?).to eq([1, 3, 5])
+      expect((1..5).my_select { |num| num.odd? }).to eq([1, 3, 5])
     end
   end
 
@@ -98,21 +99,21 @@ require_relative '../enumerables.rb'
     end
 
     it 'returns true when the given pattern is a regex and all items matches pattern' do
-      expect((%w[cat mat bat].my_all? /at/)).to be true
+      expect(%w[cat mat bat].my_all?(/at/)).to be true
     end
 
     it 'returns false when the given pattern is a regex and all items do not match the pattern' do
-      expect((%w[cat mat bat mad].my_all? /at/)).to be false
+      expect(%w[cat mat bat mad].my_all?(/at/)).to be false
     end
   end
 
   describe 'my_any? method' do
     it 'returns true if a block returns true' do
-      expect([2, 3, 5, 7].my_any?{|num| num.even?}).to be true
+      expect([2, 3, 5, 7].my_any? { |num| num.even? }).to be true
     end
 
     it 'returns false if block returns false for all items' do
-      expect([2, 4, 6, 8, 10].my_any?{|num| num.odd?}).to be false
+      expect([2, 4, 6, 8, 10].my_any? { |num| num.odd? }).to be false
     end
 
     it 'returns true if block is not passed and collections contains a non falsy item' do
@@ -124,19 +125,19 @@ require_relative '../enumerables.rb'
     end
 
     it 'returns true when the given pattern is a class and at least one item is an instance of the class' do
-      expect([1, 2, 3, 4, 'cat'].my_any? String).to be true
+      expect([1, 2, 3, 4, 'cat'].my_any?(String)).to be true
     end
 
     it 'returns false when the given pattern is a class and none of the items is an instance of the class' do
-      expect([1, 2, 3, 4, 1.66].my_any? String).to be false
+      expect([1, 2, 3, 4, 1.66].my_any?(String)).to be false
     end
 
     it 'returns true when the given pattern is a regex and at least one item matches the pattern' do
-      expect(%w[cat mat bat Ruby].my_any? /by/).to be true
+      expect(%w[cat mat bat Ruby].my_any?(/by/)).to be true
     end
 
     it 'returns false when the given pattern is a regex and non of the items matches the pattern' do
-      expect(%w[cat mat bat rat].my_any? /go/).to be false
+      expect(%w[cat mat bat rat].my_any?(/go/)).to be false
     end
   end
 
@@ -146,7 +147,7 @@ require_relative '../enumerables.rb'
     end
 
     it 'returns false if a block returns true for any of the items' do
-      expect([1, 2, 3, 4].my_none? {|num| num.even?}).to be false
+      expect([1, 2, 3, 4].my_none? { |num| num.even? }).to be false
     end
 
     it 'returns true if a block is not passed and collections contains only falsy values' do
@@ -158,19 +159,19 @@ require_relative '../enumerables.rb'
     end
 
     it 'returns true when the given pattern is a class and none of the items are instances of a class' do
-      expect([1, 2, 3, 4].my_none? String).to be true
+      expect([1, 2, 3, 4].my_none?(String)).to be true
     end
 
     it 'returns false when the given pattern is a class and at least one of the items is an instance of a class' do
-      expect([1, 2, 3, 4, 1.66].my_none? Integer).to be false
+      expect([1, 2, 3, 4, 1.66].my_none?(Integer)).to be false
     end
 
     it 'returns true when the given pattern is a regex and none of the items matches the pattern' do
-      expect(%w[cat mat bat].my_none? /rat/).to be true
+      expect(%w[cat mat bat].my_none?(/rat/)).to be true
     end
 
     it 'returns false when the given pattern is a regex and one of the items matches the pattern' do
-      expect(%w[cat mat bat mad].my_none? /bat/).to be false
+      expect(%w[cat mat bat mad].my_none?(/bat/)).to be false
     end
   end
 
@@ -202,15 +203,15 @@ require_relative '../enumerables.rb'
     end
 
     it 'returns empty array if block is empty' do
-       expect([].my_map{|item| item}).to eq([])
+      expect([].my_map{ |item| item }).to eq([])
     end
 
     it 'returns a mapped array when called on range' do
-      expect((1..5).my_map{|num| num * 2}).to eq([2,4,6,8,10])
+      expect((1..5).my_map{ |num| num * 2 }).to eq([2, 4, 6, 8, 10])
     end
 
     it 'returns a mapped array when called with a Proc' do
-      expect([1, 2, 3, 4, 5].my_map(Proc.new {|num| num * 2 })).to eq([2, 4, 6, 8, 10])
+      expect([1, 2, 3, 4, 5].my_map(proc { |num| num * 2 })).to eq([2, 4, 6, 8, 10])
     end
   end
 
@@ -220,7 +221,7 @@ require_relative '../enumerables.rb'
     end
 
     it 'combines all items in an array when block is given' do
-      expect(['bet', 'breathe', 'bake'].my_inject { |accm, current| (accm.length > current.length) ? accm : current }).to eq 'breathe'
+      expect(%w[bet bird].my_inject { |accm, current| accm.length > current.length ? accm : current }).to eq 'bird'
     end
 
     it 'combines all items in a range when block is given' do
@@ -239,4 +240,6 @@ require_relative '../enumerables.rb'
       expect([1, 3, 5, 7].my_inject(15, :+)).to eq 31
     end
   end
- end
+end
+
+# rubocop:enable Style/SymbolProc
