@@ -203,11 +203,11 @@ describe Enumerable do
     end
 
     it 'returns empty array if block is empty' do
-      expect([].my_map{ |item| item }).to eq([])
+      expect([].my_map { |item| item }).to eq([])
     end
 
     it 'returns a mapped array when called on range' do
-      expect((1..5).my_map{ |num| num * 2 }).to eq([2, 4, 6, 8, 10])
+      expect((1..5).my_map { |num| num * 2 }).to eq([2, 4, 6, 8, 10])
     end
 
     it 'returns a mapped array when called with a Proc' do
