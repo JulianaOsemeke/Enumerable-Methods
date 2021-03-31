@@ -1,4 +1,4 @@
-# require_relative '../enumerables.rb'
+require_relative '../enumerables.rb'
 
   describe Enumerable do
   describe 'my_each method' do
