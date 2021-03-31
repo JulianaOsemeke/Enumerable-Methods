@@ -54,9 +54,11 @@ describe Enumerable do
     it 'returns an enumerator if no block is given' do
       expect((1..5).my_select.class).to be Enumerator
     end
+
     it 'selects items when called on an array' do
       expect([1,2,3,4].my_select {|num| num.odd?}).to eq([1,3])
     end
+
     it 'selects items when called on a range' do
       expect((1..5).my_select {|num| num.odd?}).to eq([1,3,5])
     end
@@ -66,30 +68,39 @@ describe Enumerable do
     it 'returns true if a block does not return false or nil' do
       expect([2,4,6,8].my_all?{|num| num.even?}).to be true
     end
+
     it 'returns false if a block returns false' do
       expect([1,2,3,4].my_all?{|num| num.even?}).to be false
     end
+
     it 'returns false if a block returns nil' do
       expect([1,2,3,nil].my_all?{|num| num}).to be false
     end
+
     it 'returns true if a block is not passed and collections does not contain false or nil' do
       expect([1,2,3].my_all?).to be true
     end
+
     it 'returns false if a block is not passed and collections contains false' do
       expect([1,2,3,false].my_all?).to be false
     end
+
     it 'returns false if a block is not passed and collections contains nil' do
       expect([1,2,3,nil].my_all?).to be false
     end
+
     it 'returns true when the given pattern is a class and all items are instances of a class' do
       expect([1,2,3,4].my_all? Integer).to be true
     end
+
     it 'returns false when the given pattern is a class and all items are not instances of a class' do
       expect([1,2,3,4,1.66].my_all? Integer).to be false
     end
+
     it 'returns true when the given pattern is a regex and all items matches pattern' do
       expect(%w[cat mat bat].my_all? /at/).to be true
     end
+
     it 'returns false when the given pattern is a regex and all items do not match the pattern' do
       expect(%w[cat mat bat mad].my_all? /at/).to be false
     end
@@ -133,24 +144,31 @@ describe Enumerable do
     it 'returns true if a block does not return true for any of the items' do
       expect([2,4,6,8].my_none? {|num| num.odd?}).to be true
     end
+
     it 'returns false if a block returns true for any of the items' do
       expect([1,2,3,4].my_none? {|num| num.even?}).to be false
     end
+
     it 'returns true if a block is not passed and collections contains only falsy values' do
       expect([nil,nil,false].my_none?).to be true
     end
+
     it 'returns false if a block is not passed and collections contains a truthy value' do
       expect([1,2,3,false].my_none?).to be false
     end
+
     it 'returns true when the given pattern is a class and none of the items are instances of a class' do
       expect([1,2,3,4].my_none? String).to be true
     end
+
     it 'returns false when the given pattern is a class and at least one of the items is an instance of a class' do
       expect([1,2,3,4,1.66].my_none? Integer).to be false
     end
+
     it 'returns true when the given pattern is a regex and none of the items matches the pattern' do
       expect(%w[cat mat bat].my_none? /rat/).to be true
     end
+
     it 'returns false when the given pattern is a regex and one of the items matches the pattern' do
       expect(%w[cat mat bat mad].my_none? /bat/).to be false
     end
@@ -182,11 +200,43 @@ describe Enumerable do
     it 'returns an Enumerator if block is not given' do
       expect([1,2,3,4,5].my_map.class).to be Enumerator
     end
+
     it 'returns empty array if block is empty' do
        expect([].my_map{|item| item}).to eq([])
     end
-    it 'returns a map array when called on range' do
+
+    it 'returns a mapped array when called on range' do
       expect((1..5).my_map{|num| num * 2}).to eq([2,4,6,8,10])
+    end
+
+    it 'returns a mapped array when called with a Proc' do
+      expect([1, 2, 3, 4, 5].my_map(Proc.new {|num| num * 2 })).to eq([2,4,6,8,10])
+    end
+  end
+
+  describe 'my_inject' do
+    it 'returns nil when collection is empty' do
+      expect([].my_inject { |accm, current| accm + current }).to be nil
+    end
+
+    it 'combines all items in an array when block is given' do
+      expect(['bet', 'breathe', 'bake'].my_inject { |accm, current| (accm.length > current.length) ? accm : current }).to eq 'breathe'
+    end
+
+    it 'combines all items in a range when block is given' do
+      expect((2..6).my_inject { |accm, current| accm * current }).to eq 720
+    end
+
+    it 'combines all items in a collection when block is given and initial value passed in' do
+      expect([1, 3, 5, 7].my_inject(15) { |accm, current| accm + current }).to eq 31
+    end
+
+    it 'combines all items in a collection when symbol is passed in' do
+      expect([1, 3, 5, 7].my_inject(:*)).to eq 105
+    end
+
+    it 'combines all items in a collection when symbol and initial value passed in' do
+      expect([1, 3, 5, 7].my_inject(15, :+)).to eq 31
     end
   end
  end
